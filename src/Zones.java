@@ -81,7 +81,30 @@ public class Zones {
      * [1] the cost of the cheapest route from the zone of cell 0 to the zone of the last cell.
      */
     public static long[] routes(Input.Slides s, int[] zoneOf, int zoneCount) {
-        // TODO
-        return new long[]{0, 0};
+        long[] maxChain = new long[zoneCount];
+        Arrays.fill(maxChain, 1);
+        long[] dpCost = new long[zoneCount];
+        Arrays.fill(dpCost, Long.MAX_VALUE);
+        int startZone=zoneOf[0];
+        int endZone=zoneOf[s.n()-1];
+        dpCost[startZone]=0;
+        for (int z=0; z<zoneCount; z++){
+            for (int i=0; i<s.count(); i++){
+                int zu=zoneOf[s.from()[i]];
+                int zv=zoneOf[s.to()[i]];
+                if (zu==z && zv>z){
+                    maxChain[zv]=Math.max(maxChain[zv], maxChain[zu]+1);
+                    if (dpCost[zu]!=Long.MAX_VALUE){
+                        dpCost[zv]=Math.min(dpCost[zv], dpCost[zu]+s.time()[i]);
+                    }
+                }
+            }
+        }
+        long flowStages=0;
+        for (long chain : maxChain){
+            flowStages=Math.max(flowStages, chain);
+        }
+        long fastestRoute = dpCost[endZone]==Long.MAX_VALUE ? 0 : dpCost[endZone];
+        return new long[]{flowStages, fastestRoute};
     }
 }
