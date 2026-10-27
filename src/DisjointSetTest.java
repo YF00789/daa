@@ -24,7 +24,10 @@ public class DisjointSetTest {
         check(d.count() == 3, "3 sets: {0,1,2,3} {4} {5}");
         check(d.find(4) == 4 && d.find(5) == 5, "a single cell is its own root");
 
-        // TODO: add your own checks here
+        d.union(4, 5);
+        check(d.connected(4, 5), "4 and 5 are connected");
+        check(d.count()==2, "2 sets remaining after merging 4 and 5");
+        check(!d.union(4, 5), "redundant union on 4 and 5 returns false");
 
         System.out.println(failed == 0 ? "All checks passed." : failed + " checks failed.");
     }

@@ -1,8 +1,8 @@
 # Assignment 3. Maze Escape
 
-Student ID:
-Name:
-Group:
+Student ID: 251187
+Name: Ilya D.
+Group: SE-2511
 Maze size (rows x columns):
 
 This file is the report. Fill it in as you go. How to start: `START_HERE.md`. The task: `docs/Assignment3.pdf`.
