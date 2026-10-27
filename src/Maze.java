@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Missions 1 and 2. Building the maze out of the walls.
@@ -32,8 +31,23 @@ public class Maze {
      * Returns the indexes of the broken walls.
      */
     public static int[] cheapestMaze(Input.Walls w) {
-        // TODO
-        return new int[0];
+        Integer[] indices = new Integer[w.count()];
+        for (int i=0; i<indices.length; i++){
+            indices[i]=i;
+        }
+        Arrays.sort(indices, Comparator.comparingInt(i -> w.cost()[i]));
+        DisjointSet dsu = new DisjointSet(w.cells());
+        List<Integer> brokenList = new ArrayList<>();
+        for (int i : indices){
+            if (dsu.union(w.a()[i], w.b()[i])){
+                brokenList.add(i);
+            }
+        }
+        int[] result = new int[brokenList.size()];
+        for (int i=0; i<result.length; i++){
+            result[i]=brokenList.get(i);
+        }
+        return result;
     }
 
     /**
@@ -41,7 +55,33 @@ public class Maze {
      * It must be equal to the total cost of cheapestMaze.
      */
     public static long primCost(Input.Walls w) {
-        // TODO
-        return 0;
+        int n = w.cells();
+        List<int[]>[] adj = new ArrayList[n];
+        for (int i=0; i<n; i++){
+            adj[i] = new ArrayList<>();
+        }
+        for (int i=0; i<w.count(); i++){
+            adj[w.a()[i]].add(new int[]{w.b()[i], w.cost()[i]});
+            adj[w.b()[i]].add(new int[]{w.a()[i], w.cost()[i]});
+        }
+        boolean[] visited = new boolean[n];
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.add(new int[]{0, 0});
+        long totalCost=0;
+        int edgesUsed=0;
+        while (!pq.isEmpty() && edgesUsed<n){
+            int[] current=pq.poll();
+            int u=current[0];
+            if (visited[u]) continue;
+            visited[u]=true;
+            totalCost+=current[1];
+            edgesUsed++;
+            for (int[] edge : adj[u]){
+                if (!visited[edge[0]]){
+                    pq.add(edge);
+                }
+            }
+        }
+        return totalCost;
     }
 }
