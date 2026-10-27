@@ -1,3 +1,4 @@
+import java.util.Arrays;
 /**
  * Missions 4 and 5. The slides: a directed graph. Cells are 0 .. n-1, slide i goes from s.from()[i] to s.to()[i]
  * and takes s.time()[i]. There are no slides from a cell to itself, and the exit can always be reached from the start.
@@ -19,10 +20,60 @@ public class Zones {
      * Is DAG in Main is 1 when the number of zones equals the number of cells (no cycle), so you do not need a separate check.
      */
     public static int[] kosaraju(Input.Slides s) {
-        // TODO
-        return new int[s.n()];
+        int n = s.n();
+        int[][] from = Graphs.slidesFrom(s);
+        int[][] into = Graphs.slidesInto(s);
+        boolean[] visited = new boolean[n];
+        int[] stack = new int[n];
+        int top=-1;
+        int[] edgeIndex = new int[n];
+        for (int i=0; i<n; i++){
+            if (!visited[i]){
+                int[] dfsStack = new int[n];
+                int dfsTop=0;
+                dfsStack[0]=i;
+                visited[i]=true;
+                while (dfsTop>=0){
+                    int u=dfsStack[dfsTop];
+                    if (edgeIndex[u]<from[u].length){
+                        int slideId=from[u][edgeIndex[u]++];
+                        int v=s.to()[slideId];
+                        if (!visited[v]){
+                            visited[v]=true;
+                            dfsStack[++dfsTop]=v;
+                        }
+                    }else{
+                        stack[++top]=u;
+                        dfsTop--;
+                    }
+                }
+            }
+        }
+        int[] zoneOf = new int[n];
+        Arrays.fill(zoneOf, -1);
+        int currentZone=0;
+        for (int i=top; i>=0; i--){
+            int root=stack[i];
+            if (zoneOf[root]==-1){
+                int[] dfsStack = new int[n];
+                int dfsTop=0;
+                dfsStack[0]=root;
+                zoneOf[root]=currentZone;
+                while (dfsTop>=0){
+                    int u=dfsStack[dfsTop--];
+                    for (int slideId : into[u]){
+                        int v=s.from()[slideId];
+                        if (zoneOf[v]==-1){
+                            zoneOf[v]=currentZone;
+                            dfsStack[++dfsTop]=v;
+                        }
+                    }
+                }
+                currentZone++;
+            }
+        }
+        return zoneOf;
     }
-
     /**
      * Mission 5. The graph of zones: the edge X to Y costs the cheapest slide from X to Y, walking inside a zone is free.
      * Go through the zones in the order of their numbers (no priority queue). Returns two numbers:
