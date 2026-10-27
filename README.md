@@ -47,7 +47,7 @@ Mission 5. Why is it enough to go through the zones in the order of their number
 
 ## AI use
 
-The syllabus requires you to say which AI tools you used and for what. Write the tool (ChatGPT, Copilot, other) and what you asked it: explain an idea, find an error, review code. Write "none" if you did not use any. If you took code or text from a book or a website, give the source here.
+Used: Gemini, for guidance through the main concepts of used algorithms and principles, helping review some of the code to correct occasional mistakes.
 
 ## Timing (Mission 7)
 
