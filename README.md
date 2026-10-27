@@ -59,26 +59,27 @@ Used: Gemini, for guidance through the main concepts of used algorithms and prin
 
 Milliseconds, 5 runs each, from `java -cp out Bench`.
 
-| maze | Kruskal | Prim |
-|---|---|---|
-| 100 x 100 | | |
-| 300 x 300 | | |
-| 1000 x 1000 | | |
+| maze | Kruskal | Prim                            |
+|---|---|---------------------------------|
+|100 x 100|16 9 13 14 14  avg 13|19 6 6 5 6  avg 8|
+|300 x 300|108 72 52 48 49  avg 66|69 64 60 66 63  avg 64|
+|1000 x 1000|1090 1070 1153 1313 1284  avg 1182| 1430 1546 1651 1707 1652  avg 1597|
 
 What do the numbers say about how the time grows? Two or three sentences.
+When the maze gets bigger the time it takes for both algorithms grows quickly because there are a lot more cells and walls to process. For the smaller mazes, Kruskal and Prim takes almost the same amount of time to finish. But on the large 1000x1000 maze Kruskal is a lot faster than Prim.
 
 ## Complexity
 
 n is the number of cells, m the number of walls (or slides). Fill in every algorithm you wrote.
 
-| algorithm | time | space | assumptions |
-|---|---|---|---|
-| DSU find and union | | | |
-| Kruskal | | | |
-| Prim | | | |
-| DFS | | | |
-| Kosaraju | | | |
-| Route in the zone graph | | | |
+| algorithm | time | space | assumptions                                                                  |
+|---|---|---|------------------------------------------------------------------------------|
+| DSU find and union | O(α(n)) | O(n) | Almost O(1) per operation using path compression and union-by-size.          |
+| Kruskal | O(m log m) | O(n+m) | Time is dominated by sorting the array of edges.                             |
+| Prim | O(m log n) | O(n+m) | Uses an adjacency list and a binary heap Priority Queue.                     |
+| DFS | O(n+m) | O(n) | Time is linear, space bound because of the tracking arrays - stack, visited. |
+| Kosaraju | O(n+m) | O(n+m) | Two DFS passes scale linearly with vertices and edges.                       |
+| Route in the zone graph | O(n+m) | O(n) | Topological DP pass computes states sequentially.                            |
 
 ## Before you submit
 
